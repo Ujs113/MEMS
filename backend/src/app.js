@@ -1,10 +1,17 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
 app.use(express.json());
 const Participant = require('../models/Participant');
 
+
+var corsOptions = {
+    origin: '*',
+    optionsSuccessStatus: 200
+  }
+app.use(cors(corsOptions));
 
 //connect to db
 mongoose.connect(process.env.CONNECTION_STRING, () => console.log('connected to db'));
@@ -40,4 +47,4 @@ app.get('/participant', async(req, res) => {
     }
 })
 
-app.listen(3000);
+app.listen(8080);
