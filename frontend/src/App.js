@@ -34,7 +34,13 @@ class GeneralInfo extends React.Component
 
     handleSubmit(event){
         event.preventDefault();
-        console.log(this.state);
+        axios.post('http://localhost:8080/participant', this.state)
+        .then(respose=> {
+            console.log(respose);
+        })
+        .catch(error => {
+            console.log(error);
+        })
     }
     
     render(){
