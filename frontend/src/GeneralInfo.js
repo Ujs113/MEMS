@@ -52,7 +52,7 @@ class GeneralInfo extends React.Component{
                     <label htmlFor="mnumber">Mobile No.: </label>
                     <input type="tel" id="mnumber" name="mobileno" onChange={this.handleChange} />
                     <br />
-                    <input type="submit"/>
+                    <input type="submit" />
                 </form>
             </div>
         );

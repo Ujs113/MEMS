@@ -1,8 +1,7 @@
-//import logo from './logo.svg';
-import { instanceOf } from 'prop-types';
 import React from 'react';
 import './App.css';
 import GeneralInfo from './GeneralInfo';
+import SongInfo from './SongInfo';
 
 class App extends React.Component{
     constructor(props){
