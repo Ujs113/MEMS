@@ -1,24 +1,9 @@
 const express = require('express');
-const app = express();
-const cors = require('cors');
-const mongoose = require('mongoose');
-require('dotenv').config();
-app.use(express.json());
+const router = express.Router();
+//const mongoose = require('mongoose');
 const Participant = require('../models/Participant');
 
-
-var corsOptions = {
-    origin: '*',
-    optionsSuccessStatus: 200
-  }
-app.use(cors(corsOptions));
-
-//connect to db
-mongoose.connect(process.env.CONNECTION_STRING, () => console.log('connected to db'));
-
-//routes
-
-app.post('/participant', async (req, res) => {
+router.post('/', async (req, res) => {
     const participant = new Participant({
         firstname: req.body.firstname,
         lastname: req.body.lastname,
@@ -36,7 +21,7 @@ app.post('/participant', async (req, res) => {
     }
 })
 
-app.get('/participant', async(req, res) => {
+router.get('/', async(req, res) => {
     try{
         const participants = await Participant.find();
         res.status(200).send(participants);
@@ -47,4 +32,15 @@ app.get('/participant', async(req, res) => {
     }
 })
 
-app.listen(8080);
+router.get('/:mobileno', async(req, res) => {
+    var query = Participant.find({mobileno: Number(req.params.mobileno)});
+    query.getFilter();
+    query.exec().then((data) => {
+        res.status(200).send(data);
+    }).catch((err) => {
+        res.status(400).send(err);
+    })
+})
+
+
+module.exports = router;
