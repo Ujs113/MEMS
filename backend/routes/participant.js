@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-//const mongoose = require('mongoose');
 const Participant = require('../models/Participant');
 
 router.post('/', async (req, res) => {

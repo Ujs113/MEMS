@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 app.use(express.json());
 const participantRoutes = require('./routes/participant.js');
+const songRoutes = require('./routes/songs');
 
 
 var corsOptions = {
@@ -18,6 +19,7 @@ mongoose.connect(process.env.CONNECTION_STRING, () => console.log('connected to 
 
 //routes
 app.use('/participant', participantRoutes);
+app.use('/songs', songRoutes);
 
 
 

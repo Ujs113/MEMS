@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const duetSchema = new mongoose.Schema({
-    songName: String,
-    artistName: String,
+    songname: String,
+    artist: String,
     type: String,
-    prefPart: String
+    preference: Number
 });
 
 module.exports = Duet = mongoose.model('Duet', duetSchema);

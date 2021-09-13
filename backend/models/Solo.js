@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const soloSchema = new mongoose.Schema({
-    songName: String,
-    artistName: String
+    songname: String,
+    artist: String
 });
 
 module.exports = Solo = mongoose.model('Solo', soloSchema);
