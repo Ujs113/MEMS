@@ -58,7 +58,11 @@ class SongInfo extends React.Component{
 
     handleSubmit(event){
         event.preventDefault();
-        console.log(this.state);
+        axios.patch('http://localhost:8080/songs/' + this.state.uname, this.state)
+        .then(res => {
+            console.log(res);
+        })
+        
     }
 
     render(){
