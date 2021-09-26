@@ -28,7 +28,6 @@ router.get('/duets', async(req, res) => {
 
 
 router.patch('/:mobileno', async (req, res) => {
-    console.log("request received");
     const solo = new Solo(req.body.solosong);
     let duets;
     try{
@@ -39,10 +38,18 @@ router.patch('/:mobileno', async (req, res) => {
     }
     const update = {
         $set: { soloSong: solo},
-        $push: {duetSong: {$each: duets}}
+        $push: { duetSong: {$each: duets}},
+        $inc: { duetSize: -duets.length}
+    }
+    const dec = {
+        $inc: { duetSize: -1}
     }
     try{
         const ret = await Participant.findOneAndUpdate({mobileno: Number(req.params.mobileno)}, update, {new: true});
+        for(let i = 0; i < duets.length; i++){
+            const ret2 = await Participant.findOneAndUpdate({mobileno: Number(duets[i].preference)}, dec, {new: true});
+            console.log(ret2);
+        }
         res.status(200).send(ret);
     }catch(err){
         res.status(400).json({
