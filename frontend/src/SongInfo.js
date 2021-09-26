@@ -56,13 +56,42 @@ class SongInfo extends React.Component{
         this.setState({[name]: value});
     }
 
+    checksong(songlist, songs){
+        for(let x in songlist){
+            for(let y in songs){
+                if((x.songname === y.songname) && (x.artist === y.artist)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     handleSubmit(event){
         event.preventDefault();
-        axios.patch('http://localhost:8080/songs/' + this.state.uname, this.state)
+        let check = false;
+        axios.get('http://localhost:8080/songs/solos/')
         .then(res => {
-            console.log(res);
+            const sololist = res.data;
+            if(sololist.some(song => song.songname === this.state.solosong.songname && song.artist === this.state.solosong.artist)){
+                check = true;
+            }
         })
-        
+        axios.get('http://localhost:8080/songs/duets/')
+        .then(res => {
+            const duetlist = res.data;
+            if(this.checksong(duetlist, this.state.duetsong)){
+                check = true;
+            }
+        })
+        if(check){
+            alert('Someone else seems to have already taken that song! Please check your song details and select a different song.');
+        }else{
+            axios.patch('http://localhost:8080/songs/' + this.state.uname, this.state)
+            .then(res => {
+                console.log(res);
+            })
+        }        
     }
 
     render(){

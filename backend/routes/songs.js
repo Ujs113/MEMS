@@ -4,6 +4,29 @@ const Solo = require('../models/Solo');
 const Duet = require('../models/Duet');
 const Participant = require('../models/Participant');
 
+router.get('/solos', async(req, res) => {
+    try{
+        const solos = await Solo.find();
+        res.status(200).send(solos);
+    }catch(err){
+        res.status(400).json({
+            message: err
+        })
+    }
+});
+
+router.get('/duets', async(req, res) => {
+    try{
+        const duets = await Duet.find();
+        res.status(200).send(duets);
+    }catch(err){
+        res.status(400).json({
+            message: err
+        })
+    }
+});
+
+
 router.patch('/:mobileno', async (req, res) => {
     console.log("request received");
     const solo = new Solo(req.body.solosong);
