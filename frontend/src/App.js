@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import GeneralInfo from './GeneralInfo';
 import SongInfo from './SongInfo';
+import PrefInfo from './PrefInfo';
 
 class App extends React.Component{
     constructor(props){
@@ -15,7 +16,7 @@ class App extends React.Component{
     }
     
     render(){
-        let screen = <SongInfo />;
+        let screen = <PrefInfo />;
         // if(!this.state.isOrganized){
         //     screen = (
         //         <p>Looks like no event has been organized! If you think there is a mistake, contact the organizer</p>
