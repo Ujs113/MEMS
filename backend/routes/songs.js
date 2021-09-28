@@ -26,8 +26,34 @@ router.get('/duets', async(req, res) => {
     }
 });
 
-router.patch('/:id', async (req, res) => {
-    
+router.get('/duets/:id', async (req, res) => {
+    try{
+        console.log(req.params.id);
+        let duet = await Duet.findById(req.params.id);
+        console.log(duet);
+        res.status(200).send(duet);
+    }catch(err){
+        res.status(400).json({
+            message: err
+        });
+    }
+})
+
+router.patch('/duets/:id', async (req, res) => {
+    console.log('request received');
+    console.log(req.params.id);
+    console.log(req.body.name);
+    try{
+        let duet = await Duet.findByIdAndUpdate(req.params.id,{$set: { preference: req.body.name}}, {new: true});
+        let part = await Participant.findOneAndUpdate({mobileno: req.body.name}, {$inc: {duetSize: -1}}, {new: true})
+        console.log(duet);
+        console.log(part);
+        res.status(200).send(duet);
+    }catch(err){
+        res.status(400).json({
+            message: err
+        });
+    }
 })
 
 router.patch('/:mobileno', async (req, res) => {
