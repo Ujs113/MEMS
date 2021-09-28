@@ -1,60 +1,72 @@
 import React, { Fragment } from "react";
 import axios from "axios";
 import update from "immutability-helper";
+
 class PrefInfo extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             list: [],
             duetlist: [],
-            uname: null,
             preferences: [],
-            duetsize: null,
             complist: []
         }
         this.handleChange = this.handleChange.bind(this);
+        this.handlePrefChange = this.handlePrefChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    async componentDidMount(){
-        try{
-            const res = await axios.get('http://localhost:8080/participant');
-            this.setState({list: res.data});
-            const ret = await axios.get('http://localhost:8080/songs/duets');
-            this.setState({duetlist: ret.data});
-        }catch(err){
+    componentDidMount(){
+        axios.get('http://localhost:8080/participant')
+        .then(response => {
+            this.setState({list: response.data});
+        }).catch(err => {
             console.log(err);
-        }
+        });
+
+        axios.get('http://localhost:8080/songs/duets')
+        .then(response => {
+            this.setState({duetlist: response.data});
+        }).catch(err => {
+            console.log(err);
+        });
     }
     handlePrefChange(key, value){
-        let newState = update(this.state, {
-            preferences: {[key]:{$set: value}}
-        });
-        this.setState(newState);
+        this.setState({preferences: [...this.state.preferences, value] }, () => {console.log(this.state)});
     }
     handleChange(event){
         const name = event.target.name;
         const value = event.target.value;
         this.setState({[name]: value});
         let part = this.state.list.find(participant => participant.mobileno == value);
-        this.setState({duetsize: part.duetSize});
-        console.log(part.duetSize);
-
-        const freeduets = this.state.duetlist.filter(duet => duet.preferences == 0);
-        for(let i = 0; i < part.duetSize; i++){
-            let newState = update(this.state, {
-                complist:{
-                    [i]: {$set: <DuetOpt key={i} duetlist={freeduets} handleChange={this.handlePrefChange}/>}
-                }
-            });
-            this.setState(newState);
+        this.setState({duetsize: part.duetSize}, () => {
+            const freeduets = this.state.duetlist.filter(duet => duet.preference === 0);
+            let cpmlist = [];
+            for(let i = 0; i < this.state.duetsize; i++){
+                cpmlist.push(<DuetOpt key={i} index={i} duetlist={freeduets} handleChange={this.handlePrefChange}/>);
+            }
+            this.setState({complist: cpmlist});
+        });
+    }
+    handleSubmit(event){
+        event.preventDefault();
+        console.log(this.state);
+        for(let i = 0; i < this.state.duetsize; i++){
+            console.log(this.state.preferences[i]);
+            axios.patch("http://localhost:8080/songs/duets/" + this.state.preferences[i], {name: Number(this.state.uname)})
+            .then(response => {
+                console.log(response);
+            }).catch(err => {
+                console.log(err);
+            })
         }
     }
     render(){
         const namelist = this.state.list.filter(participant => participant.duetSize != 0);
-
+        const freeduets = this.state.duetlist.filter(duet => duet.preference == 0);
         if(freeduets.length > 0){
             return(
-                <form>
+                <form onSubmit={this.handleSubmit}>
                 Select your name: 
                 <select name="uname" id="uname" onChange={this.handleChange}>
                     <option value={null}>Select a name</option>
@@ -65,6 +77,7 @@ class PrefInfo extends React.Component{
                 <br />
                 
                 {this.state.complist}
+                <input type="submit" />
             </form>
             );
         }else{
@@ -80,7 +93,7 @@ class DuetOpt extends React.Component{
     }
     handleChange(event){
         const value = event.target.value;
-        this.props.handleChange(this.props.key, value)
+        this.props.handleChange(this.props.index, value);
     }
     render(){
         return(
