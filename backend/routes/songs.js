@@ -26,6 +26,9 @@ router.get('/duets', async(req, res) => {
     }
 });
 
+router.patch('/:id', async (req, res) => {
+    
+})
 
 router.patch('/:mobileno', async (req, res) => {
     const solo = new Solo(req.body.solosong);
