@@ -3,7 +3,8 @@ const router = express.Router();
 const Event = require('../models/Event');
 
 router.get('/', async (req,res) => {
-    const status = Event.find();
+    console.log('request received');
+    const status = await Event.find();
     res.status(200).send(status);
 });
 
