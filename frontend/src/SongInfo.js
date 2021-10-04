@@ -1,6 +1,7 @@
 import axios from 'axios';
 import update from 'immutability-helper';
 import React, { Fragment } from 'react';
+import SongTable from './SongTable';
 
 class SongInfo extends React.Component{
     constructor(props){
@@ -127,7 +128,7 @@ class SongInfo extends React.Component{
             </form>
         );
     }
-}
+};
 
 class Solo extends React.Component{
     constructor(props){
@@ -151,7 +152,7 @@ class Solo extends React.Component{
         );
     }
     
-}
+};
 
 class Duet extends React.Component{
     constructor(props){
@@ -208,7 +209,7 @@ class Duet extends React.Component{
             </Fragment>
         );
     }
-}
+};
 
 
 export default SongInfo;
