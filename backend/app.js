@@ -31,6 +31,7 @@ wss.on('connection', async (ws) => {
   ws.send(JSON.stringify(data));
   Participant.watch({fullDocument: 'updateLookup'}).on('change', (data) => {
     ws.send(JSON.stringify(data));
+    console.log(data);
   });
 })
 
