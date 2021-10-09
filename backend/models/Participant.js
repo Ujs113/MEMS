@@ -9,7 +9,8 @@ const participantSchema = new mongoose.Schema({
     gender: String,
     mobileno: Number,
     soloSong: {type: mongoose.Schema.Types.ObjectId, ref: 'Solo'},
-    duetSong: [{type: mongoose.Schema.Types.ObjectId, ref: 'Duet'}]
+    duetSong: [{type: mongoose.Schema.Types.ObjectId, ref: 'Duet'}],
+    duetSize: Number
 });
 
 module.exports = mongoose.model('Participant', participantSchema);

@@ -1,12 +1,14 @@
 import axios from 'axios';
 import update from 'immutability-helper';
 import React, { Fragment } from 'react';
+import SongTable from './SongTable';
 
 class SongInfo extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             uname: null,
+            gender: '',
             namelist: [],
             solosong: {
                 songname: '',
@@ -54,15 +56,48 @@ class SongInfo extends React.Component{
         const name = event.target.name;
         const value = event.target.value;
         this.setState({[name]: value});
+        if(name === "uname"){
+            let ret = this.state.namelist.find(participant => participant.mobileno == value);
+            this.setState({gender: ret.gender});
+        }
+    }
+
+    checksong(songlist, songs){
+        for(let x in songlist){
+            for(let y in songs){
+                if((x.songname === y.songname) && (x.artist === y.artist)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     handleSubmit(event){
         event.preventDefault();
-        axios.patch('http://localhost:8080/songs/' + this.state.uname, this.state)
+        let check = false;
+        axios.get('http://localhost:8080/songs/solos/')
         .then(res => {
-            console.log(res);
+            const sololist = res.data;
+            if(sololist.some(song => song.songname === this.state.solosong.songname && song.artist === this.state.solosong.artist)){
+                check = true;
+            }
         })
-        
+        axios.get('http://localhost:8080/songs/duets/')
+        .then(res => {
+            const duetlist = res.data;
+            if(this.checksong(duetlist, this.state.duetsong)){
+                check = true;
+            }
+        })
+        if(check){
+            alert('Someone else seems to have already taken that song! Please check your song details and select a different song.');
+        }else{
+            axios.patch('http://localhost:8080/songs/' + this.state.uname, this.state)
+            .then(res => {
+                console.log(res);
+            })
+        }        
     }
 
     render(){
@@ -83,17 +118,17 @@ class SongInfo extends React.Component{
                 <br />
                 Duet Song 1:
                 <br />
-                <Duet index={0} partList={this.state.namelist} parentCallback={this.handleDuetChange}/>
+                <Duet index={0} uname={this.state.uname} gender={this.state.gender} pref={this.state.duetsong[1].preference} partList={this.state.namelist} parentCallback={this.handleDuetChange}/>
                 <br />
                 Duet Song 2:
                 <br />
-                <Duet index={1} partList={this.state.namelist} parentCallback={this.handleDuetChange}/>
+                <Duet index={1} uname={this.state.uname} gender={this.state.gender} pref={this.state.duetsong[0].preference} partList={this.state.namelist} parentCallback={this.handleDuetChange}/>
                 <br />
                 <input type="submit" />
             </form>
         );
     }
-}
+};
 
 class Solo extends React.Component{
     constructor(props){
@@ -117,22 +152,42 @@ class Solo extends React.Component{
         );
     }
     
-}
+};
 
 class Duet extends React.Component{
     constructor(props){
         super(props);
-
+        this.state = {
+            type: 'same'
+        }
         this.handleChange = this.handleChange.bind(this);
     }
     handleChange(event){
         const name = event.target.name;
         const value = event.target.value;
         const index = this.props.index;
+        if(name === 'type'){
+            this.setState({[name]: value});
+        }
         this.props.parentCallback(index, name, value);
     }
+    requiredGender(){
+        if(this.props.gender === 'male'){
+            if(this.state.type === 'same'){
+                return 'male';
+            }else{
+                return 'female';
+            }
+        }else{
+            if(this.state.type === 'same'){
+                return 'female';
+            }else{
+                return 'male';
+            }
+        }
+    }
     render(){
-        const list = this.props.partList;
+        const list = this.props.partList.filter(participant => participant.duetSize != 0 && participant.gender === this.requiredGender() && participant.mobileno != this.props.pref && participant.mobileno != this.props.uname);
         return(
             <Fragment>
                 <label htmlFor="songname">Song Name: </label>
@@ -154,7 +209,7 @@ class Duet extends React.Component{
             </Fragment>
         );
     }
-}
+};
 
 
 export default SongInfo;

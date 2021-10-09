@@ -31,6 +31,17 @@ router.get('/', async(req, res) => {
     }
 })
 
+router.get('/populated', async(req, res) => {
+    try{
+        const participants = await Participant.find().populate('soloSong').populate('duetSong');
+        res.status(200).send(participants);
+    }catch(err){
+        res.status(400).json({
+            message: err
+        })
+    }
+})
+
 router.get('/:mobileno', async(req, res) => {
     var query = Participant.find({mobileno: Number(req.params.mobileno)});
     query.getFilter();
