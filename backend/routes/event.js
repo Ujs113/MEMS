@@ -3,9 +3,15 @@ const router = express.Router();
 const Event = require('../models/Event');
 
 router.get('/', async (req,res) => {
-    console.log('request received');
-    const status = await Event.find();
-    res.status(200).send(status);
+    try{
+        const status = await Event.find();
+        res.status(200).send(status);
+    }catch(err){
+        res.status(400).json({
+            message: err
+        })
+    }
+    
 });
 
 router.post('/', async (req, res) => {

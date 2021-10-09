@@ -1,10 +1,15 @@
 const express = require('express');
+const cors = require('cors');
 const http = require('http');
-const WebSocket = require('ws');
+const Socket = require('socket.io');
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
-const cors = require('cors');
+const io = Socket(server, {
+  cors: {
+    origin: '*',
+    optionsSuccessStatus: 200
+  }
+});
 const mongoose = require('mongoose');
 require('dotenv').config();
 app.use(express.json());
@@ -23,15 +28,11 @@ app.use(cors(corsOptions));
 //connect to db
 mongoose.connect(process.env.CONNECTION_STRING, () => console.log('connected to db'));
 
-server.on('request', app);
-
 //websocket
-wss.on('connection', async (ws) => {
-  var data = await Participant.find();
-  ws.send(JSON.stringify(data));
+io.on('connection', async (ws) => {
+  console.log('Websocket connected');
   Participant.watch({fullDocument: 'updateLookup'}).on('change', (data) => {
-    ws.send(JSON.stringify(data));
-    console.log(data);
+    ws.emit('message',data);
   });
 })
 
@@ -41,4 +42,5 @@ app.use('/participant', participantRoutes);
 app.use('/songs', songRoutes);
 
 
-server.listen(8080);
+app.listen(8080)
+server.listen(8000);
