@@ -1,7 +1,6 @@
 import axios from 'axios';
 import update from 'immutability-helper';
 import React, { Fragment } from 'react';
-import SongTable from './SongTable';
 
 class SongInfo extends React.Component{
     constructor(props){
