@@ -4,7 +4,6 @@ import GeneralInfo from './GeneralInfo';
 import SongInfo from './SongInfo';
 import PrefInfo from './PrefInfo';
 import axios from 'axios';
-import Stub from './SongTable';
 
 class App extends React.Component{
     constructor(props){
