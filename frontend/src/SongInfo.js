@@ -1,7 +1,6 @@
 import axios from 'axios';
 import update from 'immutability-helper';
 import React, { Fragment } from 'react';
-import SongTable from './SongTable';
 
 class SongInfo extends React.Component{
     constructor(props){
@@ -29,7 +28,7 @@ class SongInfo extends React.Component{
         .then(response => {
             console.log(response);
             this.setState({namelist: response.data});
-        })
+        });
     }
 
     handleSoloChange(name, value){
@@ -103,29 +102,31 @@ class SongInfo extends React.Component{
     render(){
         const namelist = this.state.namelist;
         return(
-            <form onSubmit={this.handleSubmit}>
-                Select your name: 
-                <select name="uname" id="uname" onChange={this.handleChange}>
-                    <option value={null}>Select a name</option>
-                    {namelist.map((option) => (
-                        <option value={option.mobileno}>{option.firstname + " " + option.lastname}</option>
-                    ))}
-                </select>
-                <br />
-                Solo Song:
-                <br />
-                <Solo parentCallback={this.handleSoloChange}/>
-                <br />
-                Duet Song 1:
-                <br />
-                <Duet index={0} uname={this.state.uname} gender={this.state.gender} pref={this.state.duetsong[1].preference} partList={this.state.namelist} parentCallback={this.handleDuetChange}/>
-                <br />
-                Duet Song 2:
-                <br />
-                <Duet index={1} uname={this.state.uname} gender={this.state.gender} pref={this.state.duetsong[0].preference} partList={this.state.namelist} parentCallback={this.handleDuetChange}/>
-                <br />
-                <input type="submit" />
-            </form>
+            <div>
+                <form onSubmit={this.handleSubmit}>
+                    Select your name: 
+                    <select name="uname" id="uname" onChange={this.handleChange}>
+                        <option value={null}>Select a name</option>
+                        {namelist.map((option) => (
+                            <option value={option.mobileno}>{option.firstname + " " + option.lastname}</option>
+                        ))}
+                    </select>
+                    <br />
+                    Solo Song:
+                    <br />
+                    <Solo parentCallback={this.handleSoloChange}/>
+                    <br />
+                    Duet Song 1:
+                    <br />
+                    <Duet index={0} uname={this.state.uname} gender={this.state.gender} pref={this.state.duetsong[1].preference} partList={this.state.namelist} parentCallback={this.handleDuetChange}/>
+                    <br />
+                    Duet Song 2:
+                    <br />
+                    <Duet index={1} uname={this.state.uname} gender={this.state.gender} pref={this.state.duetsong[0].preference} partList={this.state.namelist} parentCallback={this.handleDuetChange}/>
+                    <br />
+                    <input type="submit" />
+                </form>
+            </div>
         );
     }
 };
