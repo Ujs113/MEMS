@@ -3,7 +3,6 @@ import './App.css';
 import GeneralInfo from './GeneralInfo';
 import SongInfo from './SongInfo';
 import PrefInfo from './PrefInfo';
-import SongTable from './SongTable';
 import axios from 'axios';
 
 class App extends React.Component{
@@ -33,21 +32,21 @@ class App extends React.Component{
     }
     
     render(){
-        let screen = <SongTable/>;
-        // if(!this.state.isOrganized){
-        //     screen = (
-        //         <p>Looks like no event has been organized! If you think there is a mistake, contact the organizer</p>
-        //     );
-        // }   
-        // else if(!this.state.partInfoCollected){
-        //     screen = <GeneralInfo />;
-        // }
-        // else if(!this.state.songInfoCollected){
-        //     screen = <SongInfo />;
-        // }
-        // else{
-        //     screen = <PrefInfo />;
-        // }
+        let screen;
+        if(!this.state.isOrganized){
+            screen = (
+                <p>Looks like no event has been organized! If you think there is a mistake, contact the organizer</p>
+            );
+        }   
+        else if(!this.state.partInfoCollected){
+            screen = <GeneralInfo />;
+        }
+        else if(!this.state.songInfoCollected){
+            screen = <SongInfo />;
+        }
+        else{
+            screen = <PrefInfo />;
+        }
         return (
             <div>
                 <h1>Welcome to MEMS</h1>
