@@ -15,9 +15,6 @@ namespace Music_event_management_system
     public partial class SongInfo : Form
     {
         private static HttpClient _httpClient;
-        private static BindingSource masterSource;
-        private static BindingSource detailSourceSolo;
-        private static BindingSource detailSourceDuet;
 
         public SongInfo(HttpClient httpClient)
         {
@@ -27,23 +24,58 @@ namespace Music_event_management_system
 
         private async void Form8_Load(object sender, EventArgs e)
         {
-            await getparticipants();
+            var list = await getparticipants();
+            var table = SerializeSongs(list);
+            dataGridView1.DataSource = table;
         }
 
-        private async Task getparticipants()
+        private async Task<List<Participant>> getparticipants()
         {
             var response = await _httpClient.GetFromJsonAsync<List<Participant>>($"/participant/populated");
-            var list = new BindingList<Participant>(response);
-            masterSource = new BindingSource(list, null);
-            dataGridView1.DataSource = masterSource;
-            detailSourceSolo = new BindingSource(list, "SoloSong");
-            detailSourceDuet = new BindingSource(list, "DuetSong");
-            dataGridView2.DataSource = detailSourceSolo;
-            dataGridView3.DataSource = detailSourceDuet;
-            DataTable table = new DataTable("Solo");
+            return response;
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private DataTable SerializeSongs(List<Participant> list)
+        {
+            DataTable returnTable = new DataTable("Song Info");
+            returnTable.Columns.Add("Participant Name");
+            returnTable.Columns.Add("Solo Song Name");
+            returnTable.Columns.Add("Solo Song Artist");
+            int i = 1;
+            foreach(Participant part in list)
+            {
+                int columnsRequired = (part.duetSong.Length * 2) + 3;
+
+                while(returnTable.Columns.Count < columnsRequired)
+                {
+                    returnTable.Columns.Add("Duet Song " + i + " Name");
+                    returnTable.Columns.Add("Duet Song " + i + " Artist");
+                    i++;
+                }
+                returnTable.AcceptChanges();
+                DataRow row = returnTable.NewRow();
+                row[0] = part.firstname + " " + part.lastname;
+                row[1] = part.soloSong.songname;
+                row[2] = part.soloSong.artist;
+                int j = 3;
+                foreach(Duetsong duet in part.duetSong)
+                {
+                    row[j] = duet.songname;
+                    j++;
+                    row[j] = duet.artist;
+                    j++;
+                }
+                returnTable.Rows.Add(row);
+            }
+            return returnTable;
+        }
+
+        private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
 
         }

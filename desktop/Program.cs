@@ -22,7 +22,6 @@ namespace Music_event_management_system
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             ConfigureServices();
-            //Application.Run(new Form1());
             Application.Run((Main_Menu)ServiceProvider.GetService(typeof(Main_Menu)));
         }
         private static void ConfigureServices()

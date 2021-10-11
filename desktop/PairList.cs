@@ -33,46 +33,11 @@ namespace Music_event_management_system
 
         private async void Form5_Load(object sender, EventArgs e)
         {
-            var data = await getparticipants();
-            var list = PairUp(data);
+            var utility = new Utility();
+            var data = await utility.getparticipants(_httpClient);
+            var list = utility.PairUp(data);
             var table = SerializePairs(list);
             dataGridView1.DataSource = table;
-        }
-
-        private async Task<List<Participant>> getparticipants()
-        {
-            var response = await _httpClient.GetFromJsonAsync<List<Participant>>($"/participant/populated");
-            return response;
-        }
-
-        private List<Pair> PairUp(List<Participant> participantList)
-        {
-            List<Pair> pairs = new List<Pair>();
-            foreach(Participant participant in participantList)
-            {
-                foreach(Duetsong duet in participant.duetSong)
-                {
-                    Pair tmp = new Pair();
-                    tmp.participants[0] = participant;
-                    //var id = duet._id;
-                    var mobileno = duet.preference;
-                    var part = findParticipant(participantList, mobileno);
-                    tmp.participants[1] = part;
-                    tmp.song = duet;
-                    pairs.Add(tmp);
-                }
-            }
-            return pairs;
-        }
-
-        private Participant findParticipant(List<Participant> list, long mobileno)
-        {
-            foreach(Participant part in list)
-            {
-                if (part.mobileno == mobileno)
-                    return part;
-            }
-            return null;
         }
 
         private DataTable SerializePairs(List<Pair> list)

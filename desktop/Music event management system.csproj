@@ -212,7 +212,6 @@
     <Compile Include="PairList.Designer.cs">
       <DependentUpon>PairList.cs</DependentUpon>
     </Compile>
-    <Compile Include="SongInfoViewModel.cs" />
     <Compile Include="SongOrder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -234,6 +233,7 @@
     <Compile Include="Participant.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility.cs" />
     <EmbeddedResource Include="Main_Menu.resx">
       <DependentUpon>Main_Menu.cs</DependentUpon>
     </EmbeddedResource>
