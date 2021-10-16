@@ -34,12 +34,12 @@ namespace Music_event_management_system
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.participantBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.firstnameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lastnameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.genderDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mobilenoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.duetSizeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.participantBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.participantBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -54,6 +54,7 @@ namespace Music_event_management_system
             this.label1.Size = new System.Drawing.Size(372, 44);
             this.label1.TabIndex = 0;
             this.label1.Text = "PARTICIPANT LIST";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // button1
             // 
@@ -95,10 +96,6 @@ namespace Music_event_management_system
             this.dataGridView1.Size = new System.Drawing.Size(542, 344);
             this.dataGridView1.TabIndex = 3;
             // 
-            // participantBindingSource
-            // 
-            this.participantBindingSource.DataSource = typeof(Music_event_management_system.Participant);
-            // 
             // firstnameDataGridViewTextBoxColumn
             // 
             this.firstnameDataGridViewTextBoxColumn.DataPropertyName = "firstname";
@@ -128,6 +125,10 @@ namespace Music_event_management_system
             this.duetSizeDataGridViewTextBoxColumn.DataPropertyName = "duetSize";
             this.duetSizeDataGridViewTextBoxColumn.HeaderText = "duetSize";
             this.duetSizeDataGridViewTextBoxColumn.Name = "duetSizeDataGridViewTextBoxColumn";
+            // 
+            // participantBindingSource
+            // 
+            this.participantBindingSource.DataSource = typeof(Music_event_management_system.Participant);
             // 
             // PartListForm
             // 

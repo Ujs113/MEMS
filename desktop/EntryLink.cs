@@ -15,6 +15,7 @@ namespace Music_event_management_system
     public partial class EntryLink : Form
     {
         private static HttpClient _httpClient;
+        private static Utility utility = new Utility();
         public EntryLink(HttpClient httpClient)
         {
             InitializeComponent();
@@ -23,17 +24,31 @@ namespace Music_event_management_system
 
         private async void Form7_Load(object sender, EventArgs e)
         {
-            await OrganizeEvent();
-        }
-
-        private async Task OrganizeEvent()
-        {
-            EventState state = new EventState();
-            state.isOrganized = true;
-            state.partInfoCollected = false;
-            state.songInfoCollected = false;
-            var response = await _httpClient.PostAsJsonAsync($"/event", state);
-
+            
+            var state = await utility.getEventState(_httpClient);
+            if(state == null)
+            {
+                state = new EventState
+                {
+                    isOrganized = true,
+                    partInfoCollected = false,
+                    songInfoCollected = false
+                };
+                var response = await _httpClient.PostAsJsonAsync($"/event", state);
+                if(response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Event Successfully Organized");
+                }
+                else
+                {
+                    MessageBox.Show("Error ocurred while organizing the event");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Event already Organized!");
+            }
+            
         }
     }
 }
