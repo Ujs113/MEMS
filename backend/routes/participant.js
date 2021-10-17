@@ -7,7 +7,8 @@ router.post('/', async (req, res) => {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         gender: req.body.gender,
-        mobileno: req.body.mobileno
+        mobileno: req.body.mobileno,
+        duetSize: req.body.duetSize
     });
 
     try{
