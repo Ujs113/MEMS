@@ -89,8 +89,11 @@ class SongInfo extends React.Component{
                 check = true;
             }
         })
+
         if(check){
             alert('Someone else seems to have already taken that song! Please check your song details and select a different song.');
+        }else if(this.state.uname === null) {
+            alert('Please select your name!');
         }else{
             axios.patch('http://localhost:8080/songs/' + this.state.uname, this.state)
             .then(res => {
