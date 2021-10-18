@@ -42,10 +42,10 @@ router.get('/duets/:id', async (req, res) => {
 router.patch('/duets/:id', async (req, res) => {
     console.log('request received');
     console.log(req.params.id);
-    console.log(req.body.name);
+    console.log(req.body.preference);
     try{
-        let duet = await Duet.findByIdAndUpdate(req.params.id,{$set: { preference: req.body.name}}, {new: true});
-        let part = await Participant.findOneAndUpdate({mobileno: req.body.name}, {$inc: {duetSize: -1}}, {new: true})
+        let duet = await Duet.findByIdAndUpdate(req.params.id,{$set: { preference: req.body.preference}}, {new: true});
+        let part = await Participant.findOneAndUpdate({mobileno: req.body.preference}, {$inc: {duetSize: -1}}, {new: true})
         console.log(duet);
         console.log(part);
         res.status(200).send(duet);
