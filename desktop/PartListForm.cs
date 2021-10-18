@@ -18,8 +18,10 @@ namespace Music_event_management_system
     public partial class PartListForm : Form
     {
         private static HttpClient _httpClient;
+        private static BindingList<Participant> list;
         private static BindingSource source;
         private static Utility utility = new Utility();
+        private string id;
 
         public PartListForm (HttpClient httpClient)
         {
@@ -31,15 +33,16 @@ namespace Music_event_management_system
         {
             var part = new Participant
             {
+                _id = id,
                 firstname = textBox1.Text,
                 lastname = textBox2.Text,
                 gender = textBox3.Text,
                 mobileno = long.Parse(textBox4.Text),
                 duetSize = int.Parse(textBox5.Text)
             };
-            await addParticipant(part);
+            await updateParticipant(part);
             var res = await utility.getparticipants(_httpClient);
-            var list = new BindingList<Participant>(res);
+            list = new BindingList<Participant>(res);
             source = new BindingSource(list, null);
             dataGridView1.DataSource = source;
             MessageBox.Show("Successfully Updated");
@@ -81,7 +84,7 @@ namespace Music_event_management_system
         private async void Form4_Load(object sender, EventArgs e)
         {
             var res = await utility.getparticipants(_httpClient);
-            var list = new BindingList<Participant>(res);
+            list = new BindingList<Participant>(res);
             source = new BindingSource(list, null);
             dataGridView1.DataSource = source;
         }    
@@ -103,13 +106,7 @@ namespace Music_event_management_system
                 textBox4.Text = row.Cells[3].Value.ToString();
                 textBox5.Text = row.Cells[4].Value.ToString();
             }
-            
-        }
-
-        private void participantBindingSource_ListChanged(object sender, ListChangedEventArgs e)
-        {
-            var changedType = e.ListChangedType;
-            MessageBox.Show(changedType.ToString());
+            id = list[index]._id;
         }
 
         private async Task<bool> addParticipant(Participant part)
@@ -134,6 +131,11 @@ namespace Music_event_management_system
             source = new BindingSource(list, null);
             dataGridView1.DataSource = source;
             MessageBox.Show("Successfully Added");
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
