@@ -53,7 +53,7 @@ class PrefInfo extends React.Component{
         console.log(this.state);
         for(let i = 0; i < this.state.duetsize; i++){
             console.log(this.state.preferences[i]);
-            axios.patch("http://localhost:8080/songs/duets/" + this.state.preferences[i], {name: Number(this.state.uname)})
+            axios.patch("http://localhost:8080/songs/duets/" + this.state.preferences[i], {preference: Number(this.state.uname)})
             .then(response => {
                 console.log(response);
             }).catch(err => {
