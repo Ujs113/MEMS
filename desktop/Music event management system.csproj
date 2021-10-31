@@ -15,6 +15,21 @@
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,6 +51,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Google.OrTools, Version=9.1.9490.0, Culture=neutral, PublicKeyToken=53dbb1ea090cbef7, processorArchitecture=AMD64">
+      <HintPath>packages\Google.OrTools.9.1.9490\lib\net452\Google.OrTools.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.18.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>packages\Google.Protobuf.3.18.0\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -199,6 +220,7 @@
     <Compile Include="Main_Menu.Designer.cs">
       <DependentUpon>Main_Menu.cs</DependentUpon>
     </Compile>
+    <Compile Include="ortoolstest.cs" />
     <Compile Include="Pair.cs" />
     <Compile Include="PartListForm.cs">
       <SubType>Form</SubType>
@@ -261,6 +283,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="bop\bop_parameters.proto" />
+    <None Include="constraint_solver\assignment.proto" />
+    <None Include="constraint_solver\demon_profiler.proto" />
+    <None Include="constraint_solver\routing_enums.proto" />
+    <None Include="constraint_solver\routing_parameters.proto" />
+    <None Include="constraint_solver\search_limit.proto" />
+    <None Include="constraint_solver\search_stats.proto" />
+    <None Include="constraint_solver\solver_parameters.proto" />
+    <None Include="glop\parameters.proto" />
+    <None Include="graph\flow_problem.proto" />
+    <None Include="linear_solver\linear_solver.proto" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\Duetsong.datasource" />
     <None Include="Properties\DataSources\Participant.datasource" />
@@ -274,9 +307,29 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="sat\boolean_problem.proto" />
+    <None Include="sat\cp_model.proto" />
+    <None Include="sat\cp_model_service.proto" />
+    <None Include="sat\sat_parameters.proto" />
+    <None Include="util\optional_boolean.proto" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="orLogo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

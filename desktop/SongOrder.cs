@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -15,6 +16,7 @@ namespace Music_event_management_system
     public partial class SongOrder : Form
     {
         private static HttpClient _httpClient;
+        DataTable table;
         public SongOrder(HttpClient httpClient)
         {
             InitializeComponent();
@@ -23,7 +25,41 @@ namespace Music_event_management_system
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Sucessfully edited");
+            StreamWriter wr = new StreamWriter(@"./Songs.xls");
+            try
+            {
+
+                for (int i = 0; i < table.Columns.Count; i++)
+                {
+                    wr.Write(table.Columns[i].ToString().ToUpper() + "\t");
+                }
+
+                wr.WriteLine();
+
+                for (int i = 0; i < (table.Rows.Count); i++)
+                {
+                    for (int j = 0; j < table.Columns.Count; j++)
+                    {
+                        if (table.Rows[i][j] != null)
+                        {
+                            wr.Write(Convert.ToString(table.Rows[i][j]) + "\t");
+                        }
+                        else
+                        {
+                            wr.Write("\t");
+                        }
+                    }
+                    //go to next line
+                    wr.WriteLine();
+                }
+                //close file
+                wr.Close();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            MessageBox.Show("Sucessfully exported");
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -44,9 +80,8 @@ namespace Music_event_management_system
                 pair.type = songType.Solo;
                 list.Add(pair);
             }
-            var table = SerializeOrder(list);
+            table = SerializeOrder(list);
             dataGridView1.DataSource = table;
-            
         }
 
         private DataTable SerializeOrder(List<Pair> list)
