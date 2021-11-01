@@ -19,7 +19,6 @@ class App extends React.Component{
     componentDidMount(){
         axios.get('http://localhost:8080/event')
         .then(response => {
-            console.log(response.data);
             this.setState({
                 isOrganized: response.data[0].isOrganized,
                 partInfoCollected: response.data[0].partInfoCollected,

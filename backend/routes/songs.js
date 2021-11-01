@@ -28,9 +28,7 @@ router.get('/duets', async(req, res) => {
 
 router.get('/duets/:id', async (req, res) => {
     try{
-        console.log(req.params.id);
         let duet = await Duet.findById(req.params.id);
-        console.log(duet);
         res.status(200).send(duet);
     }catch(err){
         res.status(400).json({
@@ -40,14 +38,9 @@ router.get('/duets/:id', async (req, res) => {
 })
 
 router.patch('/duets/:id', async (req, res) => {
-    console.log('request received');
-    console.log(req.params.id);
-    console.log(req.body.preference);
     try{
         let duet = await Duet.findByIdAndUpdate(req.params.id,{$set: { preference: req.body.preference}}, {new: true});
-        let part = await Participant.findOneAndUpdate({mobileno: req.body.preference}, {$inc: {duetSize: -1}}, {new: true})
-        console.log(duet);
-        console.log(part);
+        let part = await Participant.findOneAndUpdate({mobileno: req.body.preference}, {$inc: {duetSize: -1}}, {new: true});
         res.status(200).send(duet);
     }catch(err){
         res.status(400).json({
@@ -63,7 +56,9 @@ router.patch('/:mobileno', async (req, res) => {
         await solo.save();
         duets = await Duet.create(req.body.duetsong);
     }catch(err){
-        console.log(err);
+        res.status(400).json({
+            message: err
+        })
     }
     const update = {
         $set: { soloSong: solo},

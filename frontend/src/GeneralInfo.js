@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { number } from 'prop-types';
 
 class GeneralInfo extends React.Component{
     constructor(props){
@@ -8,13 +9,21 @@ class GeneralInfo extends React.Component{
             firstname: '',
             lastname: '',
             gender: '',
-            mobileno: null
+            mobileno: null,
+            list: []
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     
+    componentDidMount() {
+        axios.get('http://localhost:8080/participant')
+        .then(response => {
+            this.setState({list: response.data});
+        })
+    }
+
     handleChange(event){
         const nam = event.target.name;
         const value = event.target.value;
@@ -23,13 +32,27 @@ class GeneralInfo extends React.Component{
 
     handleSubmit(event){
         event.preventDefault();
-        axios.post('http://localhost:8080/participant', this.state)
-        .then(respose=> {
-            console.log(respose);
-        })
-        .catch(error => {
-            console.log(error);
-        })
+        console.log(this.state.list);
+        if(this.state.firstname === '' || this.state.lastname === ''){
+            alert('Please enter a name!');
+        }else if(this.state.gender === ''){
+            alert('Please enter your gender');
+        }else if(this.state.mobileno === null || isNaN(+this.state.mobileno) || this.state.mobileno.toString().length != 10){
+
+            alert('Invalid mobile number!');
+        }else if(this.state.list.some(participant => participant.firstname === this.state.firstname && participant.lastname === this.state.lastname && participant.mobileno === Number(this.state.mobileno))){
+            alert('You have already entered your details!');
+        }
+        else{
+            axios.post('http://localhost:8080/participant', this.state)
+            .then(respose=> {
+                console.log(respose);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        }
+        
     }
     
     render(){
