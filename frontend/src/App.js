@@ -31,21 +31,21 @@ class App extends React.Component{
     }
     
     render(){
-        let screen = <PrefInfo />;
-        // if(!this.state.isOrganized){
-        //     screen = (
-        //         <p>Looks like no event has been organized! If you think there is a mistake, contact the organizer</p>
-        //     );
-        // }   
-        // else if(!this.state.partInfoCollected){
-        //     screen = <GeneralInfo />;
-        // }
-        // else if(!this.state.songInfoCollected){
-        //     screen = <SongInfo />;
-        // }
-        // else{
-        //     screen = <PrefInfo />;
-        // }
+        let screen;
+        if(!this.state.isOrganized){
+            screen = (
+                <p>Looks like no event has been organized! If you think there is a mistake, contact the organizer</p>
+            );
+        }   
+        else if(!this.state.partInfoCollected){
+            screen = <GeneralInfo />;
+        }
+        else if(!this.state.songInfoCollected){
+            screen = <SongInfo />;
+        }
+        else{
+            screen = <PrefInfo />;
+        }
         return (
             <div>
                 <h1>Welcome to MEMS</h1>

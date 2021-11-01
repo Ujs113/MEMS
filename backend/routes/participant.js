@@ -7,7 +7,8 @@ router.post('/', async (req, res) => {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         gender: req.body.gender,
-        mobileno: req.body.mobileno
+        mobileno: req.body.mobileno,
+        duetSize: req.body.duetSize
     });
 
     try{
@@ -18,6 +19,27 @@ router.post('/', async (req, res) => {
             message: err
         });
     }
+})
+
+router.patch('/', async (req, res) => {
+    const update = {
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        gender: req.body.gender,
+        mobileno: req.body.mobileno,
+        duetSize: req.body.duetSize
+    }
+    try{
+        const participant = await Participant.findOneAndUpdate({_id: req.body._id}, update, {new: true});
+        res.status(200).send(participant);
+    }catch(err){
+        console.log(err);
+        res.status(400).json({
+            message: err
+        })
+    }
+    
+
 })
 
 router.get('/', async(req, res) => {
